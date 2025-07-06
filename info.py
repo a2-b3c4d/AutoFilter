@@ -28,7 +28,7 @@ BOT_TOKEN = environ.get('BOT_TOKEN', "")
 CACHE_TIME = int(environ.get('CACHE_TIME', 300))
 USE_CAPTION_FILTER = bool(environ.get('USE_CAPTION_FILTER', True))
 
-PICS = (environ.get('PICS', 'https://envs.sh/F-9.mp4 https://files.catbox.moe/0kvknj.jpg')).split()  # Sample pic
+PICS = (environ.get('PICS', 'https://files.catbox.moe/0kvknj.jpg https://files.catbox.moe/q2dcnh.jpg https://files.catbox.moe/75frrs.jpg')).split()  # Sample pic
 NOR_IMG = environ.get("NOR_IMG", "https://files.catbox.moe/w2phqb.jpg")
 MELCOW_VID = environ.get("MELCOW_VID", "https://files.catbox.moe/q2dcnh.jpg")
 SPELL_IMG = environ.get("SPELL_IMG", "https://files.catbox.moe/qv1ysp.jpg")
