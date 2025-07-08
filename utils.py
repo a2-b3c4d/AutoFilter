@@ -829,17 +829,39 @@ async def get_cap(settings, remaining_seconds, files, query, total_results, sear
                     url=imdb['url'],
                     **locals()
                 )
-                cap+="\n\n<b>🌌 <u>ʏᴏᴜʀ ᴇɴᴄʜᴀɴᴛᴇᴅ ꜰɪʟᴇꜱ ᴀᴡᴀɪᴛ ✨</u>👇\n\n</b>"
-                for file in files:
-                    cap += f"<b><a href='https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}'>📁 {get_size(file.file_size)} ▷ {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}\n\n</a></b>"
-            else:
-                cap = f"<b>🫧 ᴛɪᴛʟᴇ : <code>{search}</code>\n📦 ᴛᴏᴛᴀʟ ꜰɪʟᴇꜱ : <code>{total_results}</code>\n👒 ʀᴇǫᴜᴇꜱᴛᴇᴅ ʙʏ : {message.from_user.mention}\n⏰ ᴛɪᴍᴇ ᴛᴏ ꜰɪɴᴅ : <code>{remaining_seconds} ꜱᴇᴄᴏɴᴅꜱ</code>\n🪄 ᴘᴏᴡᴇʀᴇᴅ ʙʏ : 👇\n🦋 {message.chat.title}</b>"
-                cap+="\n\n<b>🌌 <u>ʏᴏᴜʀ ᴇɴᴄʜᴀɴᴛᴇᴅ ꜰɪʟᴇꜱ ᴀᴡᴀɪᴛ ✨</u>👇\n\n</b>"
-                for file in files:
-                    cap += f"<b><a href='https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}'>📁 {get_size(file.file_size)} ▷ {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}\n\n</a></b>"
-    else:
-        cap = f"<b>🫧 ᴛɪᴛʟᴇ : <code>{search}</code>\n📦 ᴛᴏᴛᴀʟ ꜰɪʟᴇꜱ : <code>{total_results}</code>\n👒 ʀᴇǫᴜᴇꜱᴛᴇᴅ ʙʏ : {message.from_user.mention}\n⏰ ᴛɪᴍᴇ ᴛᴏ ꜰɪɴᴅ : <code>{remaining_seconds} ꜱᴇᴄᴏɴᴅꜱ</code>\n🪄 ᴘᴏᴡᴇʀᴇᴅ ʙʏ : 👇\n🦋<a href='https://t.me/TC_LinksZ'>ᴛᴄ_ʟɪɴᴋꜱᴢ</a> </b>"
-        cap+="\n\n<b>🌌 <u>𝐘𝐨𝐮𝐫 𝐄𝐧𝐜𝐡𝐚𝐧𝐭𝐞𝐝 𝐅𝐢𝐥𝐞𝐬 𝐀𝐰𝐚𝐢𝐭</u> ✨ 👇\n\n</b>"
+                if files:
+    cap = (
+        f"<b>🧿 ᴛɪᴛʟᴇ : <code>{search}</code>\n"
+        f"📂 ᴛᴏᴛᴀʟ ꜰɪʟᴇꜱ : <code>{total_results}</code>\n"
+        f"📝 ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ : {message.from_user.mention}\n"
+        f"⏰ ʀᴇsᴜʟᴛ ɪɴ : <code>{remaining_seconds} Sᴇᴄᴏɴᴅs</code>\n"
+        f"⚜️ ᴘᴏᴡᴇʀᴇᴅ ʙʏ : 👇</b>\n"
+        f"⚡ {message.chat.title}"
+    )
+    cap += "\n\n<b>🌌 <u>ʏᴏᴜʀ ᴇɴᴄʜᴀɴᴛᴇᴅ ꜰɪʟᴇꜱ ᴀᴡᴀɪᴛ ✨</u>👇\n\n</b>"
+    for file in files:
+        file_name_filtered = ' '.join(
+            filter(
+                lambda x: not x.startswith('[')
+                          and not x.startswith('@')
+                          and not x.startswith('www.'),
+                file.file_name.split()
+            )
+        )
+        cap += (
+            f"<b><a href='https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}'>"
+            f"📁 {get_size(file.file_size)} ▷ {file_name_filtered}</a></b>\n\n"
+        )
+else:
+    cap = (
+        f"<b>🧿 ᴛɪᴛʟᴇ : <code>{search}</code>\n"
+        f"📂 ᴛᴏᴛᴀʟ ꜰɪʟᴇꜱ : <code>{total_results}</code>\n"
+        f"📝 ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ : {message.from_user.mention}\n"
+        f"⏰ ʀᴇsᴜʟᴛ ɪɴ : <code>{remaining_seconds} Sᴇᴄᴏɴᴅs</code>\n"
+        f"⚜️ ᴘᴏᴡᴇʀᴇᴅ ʙʏ : 👇</b>\n"
+        f"⚡ <a href='https://t.me/TC_LinksZ'>ᴛᴄ_ʟɪɴᴋꜱᴢ</a>"
+    )
+    cap += "\n\n<b>🌌 <u>𝐘𝐨𝐮𝐫 𝐄𝐧𝐜𝐡𝐚ɴ𝐭𝐞𝐝 𝐅𝐢𝐥𝐞𝐬 𝐀𝐰ᴀɪᴛ ✨</u> 👇</b>\n\n"
         for file in files:
             cap += f"<b><a href='https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}'>📁 {get_size(file.file_size)} ▷ {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}\n\n</a></b>"
     return cap
