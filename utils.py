@@ -829,7 +829,7 @@ async def get_cap(settings, remaining_seconds, files, query, total_results, sear
                     url=imdb['url'],
                     **locals()
                 )
-                if files:
+if files:
     cap = (
         f"<b>🧿 ᴛɪᴛʟᴇ : <code>{search}</code>\n"
         f"📂 ᴛᴏᴛᴀʟ ꜰɪʟᴇꜱ : <code>{total_results}</code>\n"
