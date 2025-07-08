@@ -838,7 +838,14 @@ async def get_cap(settings, remaining_seconds, files, query, total_results, sear
                 for file in files:
                     cap += f"<b><a href='https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}'>📁 {get_size(file.file_size)} ▷ {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}\n\n</a></b>"
     else:
-        cap = f"<b>🫧 ᴛɪᴛʟᴇ : <code>{search}</code>\n📦 ᴛᴏᴛᴀʟ ꜰɪʟᴇꜱ : <code>{total_results}</code>\n👒 ʀᴇǫᴜᴇꜱᴛᴇᴅ ʙʏ : {message.from_user.mention}\n⏰ ᴛɪᴍᴇ ᴛᴏ ꜰɪɴᴅ : <code>{remaining_seconds} ꜱᴇᴄᴏɴᴅꜱ</code>\n🪄 ᴘᴏᴡᴇʀᴇᴅ ʙʏ : 👇\n🦋<a href="https://t.me/TC_LinksZ">ᴛᴄ_ʟɪɴᴋꜱᴢ</a> </b>"
+        cap = (
+    f"<b>🫧 ᴛɪᴛʟᴇ : <code>{search}</code>\n"
+    f"📦 ᴛᴏᴛᴀʟ ꜰɪʟᴇꜱ : <code>{total_results}</code>\n"
+    f"👒 ʀᴇǫᴜᴇꜱᴛᴇᴅ ʙʏ : {message.from_user.mention}\n"
+    f"⏰ ᴛɪᴍᴇ ᴛᴏ ꜰɪɴᴅ : <code>{remaining_seconds} ꜱᴇᴄᴏɴᴅꜱ</code>\n"
+    f"🪄 ᴘᴏᴡᴇʀᴇᴅ ʙʏ : \n"
+    f"🦋<a href='https://t.me/TC_LinksZ'>ᴛᴄ_ʟɪɴᴋꜱᴢ</a> </b>"
+            )        
         cap+="\n\n<b>🌌 <u>𝐘𝐨𝐮𝐫 𝐄𝐧𝐜𝐡𝐚𝐧𝐭𝐞𝐝 𝐅𝐢𝐥𝐞𝐬 𝐀𝐰𝐚𝐢𝐭</u> ✨ 👇\n\n</b>"
         for file in files:
             cap += f"<b><a href='https://telegram.me/{temp.U_NAME}?start=files_{file.file_id}'>📁 {get_size(file.file_size)} ▷ {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}\n\n</a></b>"
