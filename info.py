@@ -101,7 +101,7 @@ IS_TUTORIAL = bool(environ.get('IS_TUTORIAL', False))
 # ============================
 GRP_LNK = environ.get('GRP_LNK', 'https://t.me/+LoikdCDiZfUxMzI1')
 CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/AniHorizon')
-OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/Poke_prince')
+OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/SenpaiShift')
 MOVIE_UPDATE_CHANNEL_LNK = environ.get('https://t.me/+TUx3B_0bPfpkOTc1', 'https://t.me/+TUx3B_0bPfpkOTc1')
 OWNERID = int(os.environ.get('OWNERID', '6586630448'))  # Replace with the actual admin ID
 
@@ -189,7 +189,7 @@ else:
 # ============================
 # Reactions Configuration
 # ============================
-REACTIONS = ["🤝", "😇", "🤗", "😍", "👍", "🎅", "😐", "🥰", "🤩", "😱", "🤣", "😘", "👏", "😛", "😈", "🎉", "⚡️", "🫡", "🤓", "😎", "🏆", "🔥", "🤭", "⚽", "🆒", "👻", "😁"]
+REACTIONS = ["🤝", "😇", "🤗", "😍", "👍", "🎅", "💨", "🥰", "🤩", "🥶", "🤣", "😘", "👏", "😛", "😈", "🎉", "⚡️", "🫡", "🤓", "😎", "🏆", "🔥", "🤭", "😶‍🌫️", "🆒", "👻", "😁"]
 
 
 
