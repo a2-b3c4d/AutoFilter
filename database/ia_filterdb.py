@@ -284,18 +284,22 @@ async def send_msg(bot, filename, caption):
         text = text.format(filename, quality, language)
 
         if await add_name(OWNERID, filename):
-    imdb = await get_movie_details(filename)  
-    resized_poster = None
+            imdb = await get_movie_details(filename)  
+            resized_poster = None
 
-    if imdb:
-        poster_url = imdb.get('poster_url')
-        if poster_url:
-            resized_poster = await fetch_image(poster_url)  
+            if imdb:
+                poster_url = imdb.get('poster_url')
+                if poster_url:
+                    resized_poster = await fetch_image(poster_url)  
 
-    filenames = filename.replace(" ", '-')
-    btn = [[InlineKeyboardButton('🎐 Click to Search🫧', url=f"https://telegram.me/{temp.U_NAME}?start=getfile-{filenames}")]]
-    
-    await bot.send_message(chat_id=MOVIE_UPDATE_CHANNEL, text=text, reply_markup=InlineKeyboardMarkup(btn))
+            filenames = filename.replace(" ", '-')
+            btn = [[InlineKeyboardButton('🌲 Get Files 🌲', url=f"https://telegram.me/{temp.U_NAME}?start=getfile-{filenames}")]]
+            
+            if resized_poster:
+                await bot.send_photo(chat_id=MOVIE_UPDATE_CHANNEL, photo=resized_poster, caption=text, reply_markup=InlineKeyboardMarkup(btn))
+            else:              
+                await bot.send_message(chat_id=MOVIE_UPDATE_CHANNEL, text=text, reply_markup=InlineKeyboardMarkup(btn))
+
     except:
         pass
 
@@ -307,9 +311,3 @@ async def get_qualities(text, qualities: list):
             quality.append(q)
     quality = ", ".join(quality)
     return quality[:-2] if quality.endswith(", ") else quality
-
-
-
-
-
-
