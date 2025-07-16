@@ -215,8 +215,8 @@ async def broadcast_messages(user_id, message, reply_markup=None):
         logging.info(f"{user_id} - PeerIdInvalid")
         return False, "Error"
     except Exception as e:
-        return False, "Error"
-
+    logging.error(f"Broadcast Error for user {user_id}: {e}")
+    return False, "Error"
 
 
 
