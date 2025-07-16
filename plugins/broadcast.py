@@ -1,4 +1,4 @@
-7 import datetime, time, os, asyncio,logging 
+import datetime, time, os, asyncio,logging 
 from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid
 from pyrogram.errors.exceptions.bad_request_400 import MessageTooLong, PeerIdInvalid
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
@@ -216,10 +216,3 @@ async def broadcast_messages(user_id, message, reply_markup=None):
         return False, "Error"
     except Exception as e:
         return False, "Error"
-
-
-
-
-
-
-
