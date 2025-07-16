@@ -1,4 +1,4 @@
-import datetime, time, os, asyncio,logging 
+7 import datetime, time, os, asyncio,logging 
 from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid
 from pyrogram.errors.exceptions.bad_request_400 import MessageTooLong, PeerIdInvalid
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
@@ -215,8 +215,7 @@ async def broadcast_messages(user_id, message, reply_markup=None):
         logging.info(f"{user_id} - PeerIdInvalid")
         return False, "Error"
     except Exception as e:
-    logging.error(f"Broadcast Error for user {user_id}: {e}")
-    return False, "Error"
+        return False, "Error"
 
 
 
