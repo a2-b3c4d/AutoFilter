@@ -2052,7 +2052,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InlineKeyboardButton('• ˢᵉʳⁱᵉˢ ᴴᵒʳⁱᶻᵒⁿ •', url="https://t.me/+ywy8pV0RVok0MzM1"),
             InlineKeyboardButton('• ᴹᵒᵛⁱᵉˢ ᴴᵒʳⁱᶻᵒⁿ •', url="https://t.me/+ywy8pV0RVok0MzM1")
        ],[
-            InlineKeyboardButton('• 🌸 ᴬⁿⁱᵐᵉ ᴵⁿᵈᵉˣ •', url="https://t.me/TC_LinksZ")
+            InlineKeyboardButton('• 🌸 ᴬⁿⁱᵐᵉ ᴵⁿᵈᵉˣ •', url="https://t.me/AniHorizon")
        ],[ 
             InlineKeyboardButton('• ʙᴀᴄᴋ •', callback_data='start')
         ]]
