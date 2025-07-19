@@ -1,4 +1,4 @@
-import datetime, time, os, asyncio,logging 
+impodb.get_all_users()]db.get_all_users()]db.get_all_users()]db.get_all_users()]db.get_all_users()]ogging 
 from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid
 from pyrogram.errors.exceptions.bad_request_400 import MessageTooLong, PeerIdInvalid
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
@@ -7,9 +7,10 @@ from database.users_chats_db import db
 from info import ADMINS, GRP_LNK
 
         
-@Client.on_message(filters.command("broadcast") & filters.user(ADMINS) & filters.reply)
+@@Client.on_message(filters.command("broadcast") & filters.user(ADMINS) & filters.reply)
 async def broadcast(bot, message):
-    users = await db.get_all_users()
+    users = [user async for user in db.get_all_users()]
+    print(f"🔍 Total users fetched: {len(users)}")  # For debug
     b_msg = message.reply_to_message
     sts = await message.reply_text('Bʀᴏᴀᴅᴄᴀsᴛɪɴɢ Yᴏᴜʀ Mᴇssᴀɢᴇs...')
     start_time = time.time()
@@ -23,7 +24,8 @@ async def broadcast(bot, message):
 
     btn = InlineKeyboardMarkup([[InlineKeyboardButton(" Sᴇᴀʀᴄʜ ʜᴇʀᴇ", url=GRP_LNK)]])
 
-    async for user in users:
+    for user in users:
+        logging.info(f"📨 Sending to {user['id']}")
         pti, sh, err = await broadcast_messages(int(user['id']), b_msg, reply_markup=btn)
         if pti:
             success += 1
@@ -71,7 +73,8 @@ async def broadcast(bot, message):
 
 @Client.on_message(filters.command("clear_junk") & filters.user(ADMINS))
 async def remove_junkuser__db(bot, message):
-    users = await db.get_all_users()
+    users = [user async for user in db.get_all_users()]
+    print(f"🔍 Total users fetched: {len(users)}")
     b_msg = message 
     sts = await message.reply_text('IN PROGRESS.......')   
     start_time = time.time()
