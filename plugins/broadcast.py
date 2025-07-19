@@ -7,69 +7,50 @@ from database.users_chats_db import db
 from info import ADMINS, GRP_LNK
 
         
-@Client.on_message(filters.command("broadcast") & filters.user(ADMINS) & filters.reply)
-async def broadcast(bot, message):
-    users = [user async for user in db.get_all_users()]
-    print(f"🔍 Total users fetched: {len(users)}")  # For debug
-    b_msg = message.reply_to_message
-    sts = await message.reply_text('Bʀᴏᴀᴅᴄᴀsᴛɪɴɢ Yᴏᴜʀ Mᴇssᴀɢᴇs...')
-    start_time = time.time()
-    total_users = await db.total_users_count()
-    done = 0
-    blocked = 0
-    deleted = 0
-    failed = 0
-    success = 0
-    failed_reasons = ""
+@Client.on_message(filters.private & filters.command('broadcast') & filters.reply & filters.user(ADMINS))
+async def send_text(client: Client, message: Message):
+    if message.reply_to_message:
+        query = await db.get_all_users()
+        broadcast_msg = message.reply_to_message
+        total = 0
+        successful = 0
+        blocked = 0
+        deleted = 0
+        unsuccessful = 0
 
-    btn = InlineKeyboardMarkup([[InlineKeyboardButton(" Sᴇᴀʀᴄʜ ʜᴇʀᴇ", url=GRP_LNK)]])
-
-    for user in users:
-        logging.info(f"📨 Sending to {user['id']}")
-        pti, sh, err = await broadcast_messages(int(user['id']), b_msg, reply_markup=btn)
-        if pti:
-            success += 1
-        else:
-            if sh == "Blocked":
+        pls_wait = await message.reply("<i>ʙʀᴏᴀᴅᴄᴀꜱᴛ ᴘʀᴏᴄᴇꜱꜱɪɴɢ....</i>")
+        async for user in query:
+            chat_id = int(user['id'])
+            try:
+                await broadcast_msg.copy(chat_id)
+                successful += 1
+            except FloodWait as e:
+                await asyncio.sleep(e.x)
+                await broadcast_msg.copy(chat_id)
+                successful += 1
+            except UserIsBlocked:
+                await db.delete_user(chat_id)
                 blocked += 1
-            elif sh == "Deleted":
+            except InputUserDeactivated:
+                await db.delete_user(chat_id)
                 deleted += 1
-            elif sh == "Error":
-                failed += 1
-                failed_reasons += f"{user['id']}: {err}\n"
-        done += 1
-        if not done % 20:
-            await sts.edit(
-                f"Bʀᴏᴀᴅᴄᴀsᴛ Iɴ Pʀᴏɢʀᴇss:\n\n"
-                f"Tᴏᴛᴀʟ Uꜱᴇʀꜱ {total_users}\n"
-                f"Cᴏᴍᴩʟᴇᴛᴇᴅ: {done} / {total_users}\n"
-                f"Sᴜᴄᴄᴇꜱꜱ: {success}\n"
-                f"Bʟᴏᴄᴋᴇᴅ: {blocked}\n"
-                f"Dᴇʟᴇᴛᴇᴅ: {deleted}"
-            )
+            except:
+                unsuccessful += 1
+            total += 1
 
-    time_taken = datetime.timedelta(seconds=int(time.time() - start_time))
-    await sts.delete()
-    await bot.send_message(
-        message.chat.id,
-        f"Bʀᴏᴀᴅᴄᴀsᴛ Coᴍᴩʟᴇᴛᴇᴅ:\n"
-        f"Tɪᴍᴇ Tᴀᴋᴇɴ: {time_taken} Seconds\n\n"
-        f"Tᴏᴛᴀʟ Uꜱᴇʀꜱ: {total_users}\n"
-        f"Cᴏᴍᴩʟᴇᴛᴇᴅ: {done} / {total_users}\n"
-        f"Sᴜᴄᴄᴇꜱꜱ: {success}\n"
-        f"Bʟᴏᴄᴋᴇᴅ: {blocked}\n"
-        f"Dᴇʟᴇᴛᴇᴅ: {deleted}"
-    )
+        status = f"""<b><u>ʙʀᴏᴀᴅᴄᴀꜱᴛ...</u>
 
-    if failed_reasons:
-        with open("broadcast_failed.txt", "w") as f:
-            f.write(failed_reasons)
-        await bot.send_document(
-            chat_id=message.chat.id,
-            document="broadcast_failed.txt",
-            caption="📄 Failed User List"
-        )
-        os.remove("broadcast_failed.txt")
+Total Users: <code>{total}</code>
+Successful: <code>{successful}</code>
+Blocked Users: <code>{blocked}</code>
+Deleted Accounts: <code>{deleted}</code>
+Unsuccessful: <code>{unsuccessful}</code></b>"""
+
+        return await pls_wait.edit(status)
+    else:
+        msg = await message.reply("<code>Reply to a message to broadcast.</code>")
+        await asyncio.sleep(8)
+        await msg.delete()
 
 @Client.on_message(filters.command("clear_junk") & filters.user(ADMINS))
 async def remove_junkuser__db(bot, message):
