@@ -17,27 +17,57 @@ async def broadcast(bot, message):
     done = 0
     blocked = 0
     deleted = 0
-    failed =0
+    failed = 0
     success = 0
+    failed_reasons = ""
+
     btn = InlineKeyboardMarkup([[InlineKeyboardButton(" Sᴇᴀʀᴄʜ ʜᴇʀᴇ", url=GRP_LNK)]])
+
     async for user in users:
-        pti, sh = await broadcast_messages(int(user['id']), b_msg, reply_markup=btn)
+        pti, sh, err = await broadcast_messages(int(user['id']), b_msg, reply_markup=btn)
         if pti:
             success += 1
-        elif pti == False:
+        else:
             if sh == "Blocked":
-                blocked+=1
+                blocked += 1
             elif sh == "Deleted":
                 deleted += 1
             elif sh == "Error":
                 failed += 1
+                failed_reasons += f"{user['id']}: {err}\n"
         done += 1
         if not done % 20:
-            await sts.edit(f"Bʀᴏᴀᴅᴄᴀsᴛ Iɴ Pʀᴏɢʀᴇss:\n\nTᴏᴛᴀʟ Uꜱᴇʀꜱ {total_users}\nCᴏᴍᴩʟᴇᴛᴇᴅ: {done} / {total_users}\nSᴜᴄᴄᴇꜱꜱ: {success}\nBʟᴏᴄᴋᴇᴅ: {blocked}\nDᴇʟᴇᴛᴇᴅ: {deleted}")    
-    time_taken = datetime.timedelta(seconds=int(time.time()-start_time))
-    await sts.delete()
-    await bot.send_message(message.chat.id, f"Bʀᴏᴀᴅᴄᴀsᴛ Coᴍᴩʟᴇᴛᴇᴅ:\nTɪᴍᴇ Tᴀᴋᴇᴅ{time_taken} Sᴇᴄ\n\nTᴏᴛᴀʟ Uꜱᴇʀꜱ: {total_users}\nCᴏᴍᴩʟᴇᴛᴇᴅ: {done} / {total_users}\nSucᴄᴇꜱꜱ: {success}\nBʟᴏᴄᴋᴇᴅ: {blocked}\nDᴇʟᴇᴛᴇᴅ: {deleted}")
+            await sts.edit(
+                f"Bʀᴏᴀᴅᴄᴀsᴛ Iɴ Pʀᴏɢʀᴇss:\n\n"
+                f"Tᴏᴛᴀʟ Uꜱᴇʀꜱ {total_users}\n"
+                f"Cᴏᴍᴩʟᴇᴛᴇᴅ: {done} / {total_users}\n"
+                f"Sᴜᴄᴄᴇꜱꜱ: {success}\n"
+                f"Bʟᴏᴄᴋᴇᴅ: {blocked}\n"
+                f"Dᴇʟᴇᴛᴇᴅ: {deleted}"
+            )
 
+    time_taken = datetime.timedelta(seconds=int(time.time() - start_time))
+    await sts.delete()
+    await bot.send_message(
+        message.chat.id,
+        f"Bʀᴏᴀᴅᴄᴀsᴛ Coᴍᴩʟᴇᴛᴇᴅ:\n"
+        f"Tɪᴍᴇ Tᴀᴋᴇɴ: {time_taken} Seconds\n\n"
+        f"Tᴏᴛᴀʟ Uꜱᴇʀꜱ: {total_users}\n"
+        f"Cᴏᴍᴩʟᴇᴛᴇᴅ: {done} / {total_users}\n"
+        f"Sᴜᴄᴄᴇꜱꜱ: {success}\n"
+        f"Bʟᴏᴄᴋᴇᴅ: {blocked}\n"
+        f"Dᴇʟᴇᴛᴇᴅ: {deleted}"
+    )
+
+    if failed_reasons:
+        with open("broadcast_failed.txt", "w") as f:
+            f.write(failed_reasons)
+        await bot.send_document(
+            chat_id=message.chat.id,
+            document="broadcast_failed.txt",
+            caption="📄 Failed User List"
+        )
+        os.remove("broadcast_failed.txt")
 
 @Client.on_message(filters.command("clear_junk") & filters.user(ADMINS))
 async def remove_junkuser__db(bot, message):
@@ -198,21 +228,22 @@ async def clear_junk(user_id, message):
 
 async def broadcast_messages(user_id, message, reply_markup=None):
     try:
-        await message.copy(chat_id=user_id,reply_markup=reply_markup)
-        return True, "Success"
+        await message.copy(chat_id=user_id, reply_markup=reply_markup)
+        return True, "Success", None
     except FloodWait as e:
         await asyncio.sleep(e.value)
-        return await broadcast_messages(user_id, message,reply_markup=reply_markup)
+        return await broadcast_messages(user_id, message, reply_markup=reply_markup)
     except InputUserDeactivated:
         await db.delete_user(int(user_id))
         logging.info(f"{user_id}-Removed from Database, since deleted account.")
-        return False, "Deleted"
+        return False, "Deleted", None
     except UserIsBlocked:
         logging.info(f"{user_id} -Blocked the bot.")
-        return False, "Blocked"
+        return False, "Blocked", None
     except PeerIdInvalid:
         await db.delete_user(int(user_id))
         logging.info(f"{user_id} - PeerIdInvalid")
-        return False, "Error"
+        return False, "Error", "PeerIdInvalid"
     except Exception as e:
-        return False, "Error"
+        logging.error(f"Broadcast Error for user {user_id}: {e}")
+        return False, "Error", str(e)
