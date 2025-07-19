@@ -7,7 +7,7 @@ from database.users_chats_db import db
 from info import ADMINS, GRP_LNK
 
         
-@@Client.on_message(filters.command("broadcast") & filters.user(ADMINS) & filters.reply)
+@Client.on_message(filters.command("broadcast") & filters.user(ADMINS) & filters.reply)
 async def broadcast(bot, message):
     users = [user async for user in db.get_all_users()]
     print(f"🔍 Total users fetched: {len(users)}")  # For debug
